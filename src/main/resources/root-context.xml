@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:utils="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-groovy="http://www.springframework.org/schema/integration/groovy"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:int-http="http://www.springframework.org/schema/integration/http"
+       xsi:schemaLocation="http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+            http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+            http://www.springframework.org/schema/integration/groovy http://www.springframework.org/schema/integration/groovy/spring-integration-groovy.xsd
+            http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+            http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
+
+    <context:property-placeholder/>
+
+    <bean class="com.fasterxml.jackson.databind.ObjectMapper" id="objectMapper"/>
+
+
+    <int-http:inbound-gateway id="theGateWayAPI" request-channel="callGiphyApi" reply-channel="returnGiphyApi"
+                              supported-methods="GET" message-converters="theStringHttpMessageConverter" payload-expression="body"
+                              path="/search/{term}">
+        <int-http:header name="searchTerm" expression="#pathVariables.term"/>
+    </int-http:inbound-gateway>
+
+    <int:channel id="returnGiphyApi"/>
+    <int:service-activator id="callGiphyThoughGateway" input-channel="callGiphyApi" output-channel="returnGiphyApi">
+        <int-groovy:script>
+                <![CDATA[
+            javaCode.giphyApi.searchGif( headers.searchTerm )
+            ]]>
+            </int-groovy:script>
+    </int:service-activator>
+
+
+    <int:gateway id="giphyApiGateway" service-interface="gmail.garyy7811.solution.GiphyApi"
+                 default-request-channel="requestGiphyApi" default-reply-channel="replyGiphyApiResult">
+    </int:gateway>
+
+
+    <int:channel id="requestGiphyApi"/>
+    <int:channel id="replyGiphyApi">
+        <int:queue capacity="20"/>
+    </int:channel>
+
+    <!--http://api.giphy.com/v1/gifs/search
+    ?q=ryan+gosling&api_key=YOUR_API_KEY&limit=5-->
+    <int-http:outbound-gateway id="gatwayCallingGiphyAPI" request-channel="requestGiphyApi" reply-channel="replyGiphyApiRaw"
+                               message-converters="theStringHttpMessageConverter"
+                               url="${giphyApiUrl}?q={term}&amp;api_key=${giphyApiKey}&amp;limit=${giphyApiLimit}" http-method="GET"
+                               reply-timeout="${giphyApiTimeout}"
+                               expected-response-type="java.lang.String">
+        <int-http:uri-variable name="term" expression="payload"/>
+    </int-http:outbound-gateway>
+    <bean id="theStringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="writeAcceptCharset" value="false"/>
+        <property name="defaultCharset" value="#{T(java.nio.charset.StandardCharsets).UTF_8}"/>
+        <property name="supportedMediaTypes" value="#{T(org.springframework.http.MediaType).APPLICATION_JSON_UTF8_VALUE}"/>
+    </bean>
+
+    <int:channel id="replyGiphyApiResult"/>
+
+    <int:transformer id="transformGiphyFormat" input-channel="replyGiphyApiRaw" output-channel="replyGiphyApiResult" ref="javaCode" method="transformGiphyFormat"/>
+
+    <bean id="javaCode" class="gmail.garyy7811.solution.JavaCode"/>
+
+</beans>

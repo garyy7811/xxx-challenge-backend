@@ -1,0 +1,63 @@
+buildscript {
+    //todo: setup private repository
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://repo.spring.io/libs-release/"
+        }
+    }
+
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.2.RELEASE"
+        classpath "se.transmode.gradle:gradle-docker:1.2"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
+
+group = 'com.garyy7811'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+        url "http://repo.spring.io/libs-release/"
+    }
+}
+
+bootJar {
+    mainClassName = 'com.garyy7811.boots.BootMain'
+}
+
+
+
+dependencies {
+    compile "com.fasterxml.jackson.core:jackson-core:2.9.2"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.2"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.9.2"
+
+    compile "org.springframework.boot:spring-boot-starter:2.0.2.RELEASE"
+
+    compile "org.springframework.boot:spring-boot-starter-integration:1.5.10.RELEASE"
+    compile "org.springframework.boot:spring-boot-starter-web:2.0.2.RELEASE"
+    compile "org.springframework.integration:spring-integration-http:4.3.14.RELEASE"
+    compile "org.springframework.integration:spring-integration-groovy:4.3.14.RELEASE"
+
+
+    testCompile "junit:junit:4.12"
+    testCompile "org.springframework:spring-test:5.0.4.RELEASE"
+    testCompile( "org.springframework.boot:spring-boot-starter-test:2.0.2.RELEASE" )
+}
