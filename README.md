@@ -2,22 +2,13 @@ xxx Backend Challenge
 ============================
 
 ## Intro
+This is a solution to an interview code challenge which is designed to see how candidate work
+on a back-end project. I spent a little more than 2 hours, the Windows/Linux compatible issue took more time than expected.
 
-Welcome! This challenge is designed to give us a better idea of how you work
-on a back-end project. We've found project-based challenges like this are
-often more accurate than traditional coding interviews.
-
-You're free to take as much time as you like, but you should **expect to spend 2 to 4 hours on this challenge** depending on how familiar you are with your project setup.
-
-## The Challenge
-Lately, we realized that GIFs shared per hour
-is really the most important metric so we've decided to build an internal portal
-for sharing GIF collections! It's like... Pinterest for GIFs?
-Well.. you get the idea.
-
-Your quest is to complete the **two requirements sections** below.
-
-When you're done, check out the [submission guidelines](#submitting).
+Even my solution was not accepted, I still think it's worth sharing, from my perspective, my solution:
+- Reuse Spring Integration component to minimize code.
+- Highly extendable, can easily add other features( retry, caching etc. ) with AOP/Advice.
+- Prepared for integrating with more sophisticated system like Spring Cloud, Docker.
 
 
 ### Requirements - PART 1
@@ -34,7 +25,7 @@ When you're done, check out the [submission guidelines](#submitting).
   "data": [
     {
       "gif_id": "FiGiRei2ICzzG",
-      "url": "http://giphy.com/gifs/funny-cat-FiGiRei2ICzzG",
+      "url": "http://giphy.com/gifs/funny-cat-FiGiRei2ICzzG"
     }
   ]
 }
@@ -46,19 +37,3 @@ When you're done, check out the [submission guidelines](#submitting).
 - start.sh should start up your service
 - After we run start.sh, your service should be able to repond to API requests
 - These scripts should be able to run on any machine as long as they are Ubuntu 14+
-
-## Submitting
-
-1. Clone this repo and commit your code as you work. When you are satisfied with your work, follow these instructions to submit:
-2. `git format-patch master --stdout > your-name.patch`.
-    Or, if you worked straight off of master, use the commit sha preceding
-    your work.
-
-## Evaluation
-
-- We will test your project on exactly the same version of Ubuntu that we provided you with the same level of access
-  - Be sure to set a strong password on the VM. Getting your VM compromised by hackers won't look good!
-- We're going to be evaluating your project on the following criteria
-  - Did you meet all of the requirements?
-  - How easy is it for someone new to your project to understand your code?
-  - How well are you using the technology ecosystem of your choice?
