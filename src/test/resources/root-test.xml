@@ -16,13 +16,19 @@
             http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
             http://www.springframework.org/schema/integration/groovy http://www.springframework.org/schema/integration/groovy/spring-integration-groovy.xsd
             http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <context:property-placeholder location="classpath:application.properties"/>
     <context:property-placeholder location="classpath:test-config.properties"/>
     <context:annotation-config/>
 
-    <import resource="root-test.xml"/>
+    <import resource="root-context.xml"/>
 
+    <int:channel id="tstInput"/>
+    <int:channel id="tstOutput">
+        <int:queue capacity="5"/>
+    </int:channel>
 
-    <int:wire-tap channel="tstWire" pattern="*"/>
-    <int:channel id="tstWire"/>
+    <int:bridge input-channel="tstInput" output-channel="callGiphyApi"/>
+    <int:bridge input-channel="returnGiphyApi" output-channel="tstOutput"/>
+
 
 </beans>
