@@ -23,11 +23,11 @@ import java.util.Map;
 public class Testxxx{
 
     @Autowired
-    MessageChannel tstInput;
+    private MessageChannel tstInput;
     @Autowired
-    QueueChannel   tstOutput;
+    private QueueChannel   tstOutput;
     @Autowired
-    ObjectMapper   objectMapper;
+    private ObjectMapper   objectMapper;
 
 
     @Test
