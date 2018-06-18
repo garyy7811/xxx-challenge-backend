@@ -67,5 +67,10 @@
     <int:transformer id="transformGiphyFormat" input-channel="replyGiphyApiRaw" output-channel="replyGiphyApiResult" ref="javaCode" method="transformGiphyFormat"/>
 
     <bean id="javaCode" class="gmail.garyy7811.solution.JavaCode"/>
+    <bean id="sapccrCache" class="gmail.garyy7811.solution.XXXCCRCache">
+        <constructor-arg index="0" value="${cacheSizeLimit}"/>
+        <constructor-arg index="1" value="${cacheTimeLimitInSec}"/>
+        <constructor-arg index="2" value="${dateFormatPattern}"/>
+    </bean>
 
 </beans>
